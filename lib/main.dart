@@ -11,7 +11,7 @@ class CalculatorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Calculator - Swag',
+      title: 'Calculator',
       home: const CalculatorScreen(),
       debugShowCheckedModeBanner: false,
     );
@@ -28,13 +28,21 @@ class CalculatorScreen extends StatefulWidget {
 class _CalculatorScreenState extends State<CalculatorScreen> {
   String expression = "";
   String result = "";
+  bool justEvaluated = false;   // <-- NEW FLAG
 
   void onButtonPress(String value) {
     setState(() {
       if (value == "C") {
         expression = "";
         result = "";
+        justEvaluated = false;
         return;
+      }
+
+      if (justEvaluated && value != "=") {
+        expression = "";
+        result = "";
+        justEvaluated = false;
       }
 
       if (value == "=") {
@@ -47,6 +55,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         } catch (e) {
           result = "Error";
         }
+
+        justEvaluated = true;   // <-- MARK evaluation happened
         return;
       }
 
@@ -142,7 +152,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 Row(
                   children: [
                     buildButton("0"),
-                    buildButton("C", color: Colors.red),
+                    buildButton("^2", color: Colors.purple),   // <-- NEW BUTTON
                     buildButton("=", color: Colors.green),
                     buildButton("+", color: Colors.orange),
                   ],
